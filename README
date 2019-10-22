@@ -1,0 +1,9 @@
+This is the source code for lf, a program that lists files in a terse
+format, sorted by file extensions.
+
+It's released under a free software license.  See the file license.txt
+for details.
+
+I hope you find it useful.
+
+-- Steve R. Hastings

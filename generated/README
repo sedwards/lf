@@ -1,0 +1,11 @@
+This directory contains generated files.  Do not edit these files.
+
+
+List of files:
+
+lf.1
+lf.html
+	These two files are the English documentation for lf, processed from the
+	source file lf1.xml into man page format and HTML format respectively.
+	They are provided so you can look at the documentation without needing
+	to have a DocBook XML toolchain installed.

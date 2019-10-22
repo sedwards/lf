@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--
+
+Copyright 2007 Steve R. Hastings (steve@hastings.org)
+
+-->
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook V4.1//EN" "file:///usr/share/xml/docbook/schema/dtd/4.1/docbookx.dtd">
+<refentry>
+  <refentryinfo>
+    <address>
+      <email>lf@langri.com</email>
+    </address>
+    <author>
+      <firstname>Steve</firstname>
+      <surname>Hastings</surname>
+    </author>
+    <date>2007-07-19</date>
+  </refentryinfo>
+  <refmeta>
+    <refentrytitle>lf</refentrytitle>
+    <manvolnum>1</manvolnum>
+  </refmeta>
+  <refnamediv>
+    <refname>lf</refname>
+    <refpurpose>list files, sorted by extensions, in a terse format</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>lf</command>
+      <arg><replaceable>OPTION</replaceable>...</arg> <arg><replaceable>FILE</replaceable>...
+      </arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+  <refsect1>
+    <title>DESCRIPTION</title>
+    <para><command>lf</command> is a command-line tool for listing files, similar in some ways to <command>ls(1)</command>.  <command>lf</command> sorts the filenames by extension, and displays them in a terse output format.  Here is an example:</para>
+<programlisting>
+DIRS: bak junk
+    : apples filelist.md5sum makefile README
+   c: bar baz foo
+   o: baz foo
+ txt: readme
+</programlisting>
+<para>
+Directory names are shown first, marked by the string
+"<computeroutput>DIRS</computeroutput>"; directories
+with extensions are not treated specially.  If any files with no extension
+are present they will be listed next, followed by any files that do have
+extensions.  In each case the extension is printed, followed by a list
+of filenames with the extension removed.
+</para>
+<para>
+Some extensions are ignored.  Filenames with extensions that are too
+long (default: longer than 4 characters) are treated as if there were no
+extension in the filename.  In the example above, filelist.md5sum fell
+under this rule and was put on the line for files with no extension.
+</para>
+<para>
+If you specify no filename arguments, <command>lf</command> will list the files in the
+current directory.  If you specify one filename argument, <command>lf</command> will list
+it; if it is a directory, <command>lf</command> will list the files contained in that
+directory.
+</para>
+<para>
+If you specify multiple filename arguments and some of them are
+directories, <command>lf</command> will list the contents of the directories.  Here is an
+example: suppose you had two directories, foo and bar, and they had some
+files in them.  This is the result if you run <userinput>lf foo bar</userinput>:
+</para>
+<programlisting>
+    : bar/notes foo/README
+   c: bar/foocode foo/barcode
+   h: bar/foocode foo/barcode
+</programlisting>
+<para>
+If you instead called <command>lf</command> with the --directory (-d) argument, the
+contents of directories would not be read.  You would get a result like
+this:
+</para>
+<programlisting>
+DIRS: bar foo
+</programlisting>
+<para>
+<command>lf</command> treats files of the format "foo-1.23" specially.  Files with names
+like this don't really have a sensible extension, and it's better to
+have them listed with the no-extension files.  When any filename
+contains a dash ('-'), followed by zero or more digits, followed by a
+period ('.'), followed by one or more digits, <command>lf</command>
+treats the filename as if it had no extension.
+</para>
+<para>
+The extensions are printed in sorted order, and the filenames are
+sorted as well within each line.
+</para>
+<para>
+If any files have a dot as the last character of their filename, <command>lf</command> will
+consider their extension to be "." (a single dot).  Other than this
+special case, <command>lf</command> prints file extensions without a dot.
+</para>
+<para>
+<command>lf</command> tries to get the user's default locale, and use locale-specific
+functions for sorting filenames.  (If <command>lf</command> is called with the
+--force-lower-case option, the user's default locale is used for the
+lower-case function too.)  If <command>lf</command> is unable to get the locale, it will
+fall back to the "C" locale which is based on plain ASCII.
+</para>
+<para>
+Removing the extensions from the filenames saves some space, and you can fit
+quite a bit of information into one screen.  Also, it can be valuable
+to see your files sorted by extension; you can quickly tell what kinds
+of files are in the directory.
+</para>
+<para>
+Like <command>ls(1)</command>, if invoked with no
+filenames specified as arguments, <command>lf</command>
+will list the files
+in the current directory.
+</para>
+  </refsect1>
+  <refsect1>
+    <title>OPTIONS</title>
+    <variablelist>
+      <varlistentry>
+        <term>
+          <option>--license</option>
+        </term>
+        <term>
+          <option>--licence</option>
+        </term>
+        <listitem>
+          <para>
+Show the text of the free software license under which <command>lf</command> is
+distributed.
+</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-a</option>
+        </term>
+        <term>
+          <option>--show-all</option>
+        </term>
+        <listitem>
+<para>
+Include files that would normally be hidden.  On Linux and *NIX file
+systems, filenames that start with a period ('.') would normally be hidden.
+</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-A</option>
+        </term>
+        <term>
+          <option>--ascii</option>
+        </term>
+        <listitem>
+<para>
+Sort by ASCII values of characters in filenames rather than the default
+locale.  Case-sensitive.
+</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-I</option>
+        </term>
+        <term>
+          <option>--ascii-ic</option>
+        </term>
+        <listitem>
+<para>
+Sort by ASCII values of characters in filenames rather than the default
+locale.  Case-insensitive.
+</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-L</option>
+        </term>
+        <term>
+          <option>--locale</option>
+        </term>
+        <listitem>
+<para>
+Sort according to the default locale.  This is <command><command>lf</command></command>'s
+default behavior.
+</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-d</option>
+        </term>
+        <term>
+          <option>--directory</option>
+        </term>
+        <listitem>
+<para>
+Print directory names as if they were filenames, rather than listing
+their files.
+</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-X &lt;number&gt;</option>
+        </term>
+        <term>
+          <option>--ext-spacing=&lt;number&gt;</option>
+        </term>
+        <listitem>
+<para>
+Sets the width reserved on each line for the extension.  Extensions
+shorter than this are right-justified within this width.  The default
+value is 4.
+</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-Z &lt;number&gt;</option>
+        </term>
+        <term>
+          <option>--ext-width-limit=&lt;number&gt;</option>
+        </term>
+        <listitem>
+<para>
+Sets the limit on how long an extension can be.  Any extension longer
+than this limit is ignored (the filename is treated as if it did not
+contain any extension).  The default value is 4.
+</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-F</option>
+        </term>
+        <term>
+          <option>--force-lower-case</option>
+        </term>
+        <listitem>
+<para>
+Forces all filenames (including directory names) to lower case.  This
+is mainly useful if you are dealing with a file system that only
+contains upper-case filenames, such as an old FAT file system.
+</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-N &lt;string&gt;</option>
+        </term>
+        <term>
+          <option>--name-separator=&lt;string&gt;</option>
+        </term>
+        <listitem>
+<para>
+Specify a different separator to print between base filenames.  The
+default separator is a single space.  You could, for example, set
+the separator to a comma and a space (", ") if you have many
+filenames with spaces in them and you want to make it easier to tell
+where the files actually end.
+</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-S &lt;string&gt;</option>
+        </term>
+        <term>
+          <option>--replace-spaces=&lt;string&gt;</option>
+        </term>
+        <listitem>
+<para>
+Specifies a string that will replace spaces in filenames in the
+listing.  You could, for example, set this to '*' and then the filename
+"<computeroutput>this is my file</computeroutput>"
+would print as
+"<computeroutput>this*is*my*file</computeroutput>".
+(Note that the shell expands a '*' so you will need to quote it.)
+</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-w &lt;number&gt;</option>
+        </term>
+        <term>
+          <option>--line-width=&lt;number&gt;</option>
+        </term>
+        <listitem>
+<para>
+Format output in lines of this many characters or fewer.  The default
+value is 80.  <command>lf</command> will start a new line of output if printing a filename would make the line longer than this limit.
+</para>
+<para>
+In a graphical desktop environent the available width of lines in a
+terminal emulator can change if the window is resized.  The
+<command>bash(1)</command>
+shell has a shell variable, COLUMNS, that always contains the current
+line width.  With the command "export COLUMNS" you can make it into an
+environment variable, and <command>lf</command> will be able to retrieve its value.  You
+could then set the LFOPTS environment variable to include
+"--line-width=$COLUMNS", and when you resize the width of your terminal
+emulator, <command>lf</command> will print listings that fit perfectly in the new width of
+the terminal emulator.  If you do this, you can use the --margin (-M)
+option to keep filenames from going all the way to the end of the line.
+</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-M &lt;number&gt;</option>
+        </term>
+        <term>
+          <option>--margin=&lt;number&gt;</option>
+        </term>
+        <listitem>
+<para>
+Reserve (leave blank) this many spaces on the right side of each line.  The
+default value is 0, so by default <command>lf</command> will print filenames all the way
+to the full line width.
+</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-v &lt;number&gt;</option>
+        </term>
+        <term>
+          <option>--verbose=&lt;number&gt;</option>
+        </term>
+        <listitem>
+<para>
+Control how verbose the output is.  Currently three levels are defined:
+<simplelist>
+<member>
+0: just print filenames.
+</member>
+<member>
+1: print a header showing directory being listed, then print filenames.
+</member>
+<member>
+2: print a report on how options are set, then print the same output as level 1.
+</member>
+</simplelist>
+</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-V</option>
+        </term>
+        <term>
+          <option>--version</option>
+        </term>
+        <listitem>
+          <para>
+Show version information.  Complies with GNU standard --version format.
+</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+  <refsect1>
+    <title>SEE ALSO</title>
+    <para>
+      <ulink url="http://sourceforge.net/projects/lf1/">SourceForge project for lf</ulink>
+    </para>
+  </refsect1>
+  <refsect1>
+    <title>ENVIRONMENT VARIABLES</title>
+    <para>
+If you set a variable called LFOPTS in the environment, lf will
+parse it for options.  These will be treated the same as if they had
+been typed as command-line arguments to lf.  If an option is set in
+LFOPTS and set a different way from the command-line, the command-line
+argument will override the argument in LFOPTS.
+</para>
+<para>
+For example, if you often work with extensions 5 characters long, you
+might want to set LFOPTS like so:
+</para>
+<para>
+export LFOPTS="--ext-spacing=5 --ext-width-limit=5"
+    </para>
+  </refsect1>
+  <refsect1>
+    <title>HISTORY</title>
+    <para>
+In the 1980's I used a freeware program for MS-DOS called LF.COM,
+which listed files sorted by extension, and which gave me the idea for
+this program.  The author of LF.COM was not listed in the program
+anywhere, nor was source code available.  Whoever wrote LF.COM: thank
+you!
+    </para>
+  </refsect1>
+  <refsect1>
+    <title>AUTHOR</title>
+    <para>
+Written by Steve R. Hastings.
+    </para>
+  </refsect1>
+  <refsect1>
+    <title>REPORTING BUGS</title>
+    <para>
+	Report bugs to: lf@langri.com
+    </para>
+  </refsect1>
+  <refsect1>
+    <title>COPYRIGHT</title>
+    <para>
+	Copyright © 2007 Steve R. Hastings.
+    </para>
+    <para>
+	This is free software; see the source code for copying conditions.  There is
+	NO  warranty;  not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR
+	PURPOSE.
+    </para>
+  </refsect1>
+  <refsect1>
+    <title>BUGS</title>
+    <para>
+If you use the --force-lower-case (-F) option when running lf on a file
+system that allows mixed-case filenames, and there are two filenames
+that differ only by case, lf will silently show only one name for both.
+In other words, if both names are identical when forced to lower-case,
+lf will treat them as a single file.
+    </para>
+  </refsect1>
+</refentry>

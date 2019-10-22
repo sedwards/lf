@@ -1,0 +1,13 @@
+* Collect localized versions of the strings and the documentation, and
+  include them in future releases.
+
+* Improve the makefile to handle multiple languages more elegantly.
+
+* Rewrite the argument parser, or use someone else's, so that misspelled
+  options are usefully flagged instead of being tested as files; so that
+  one-letter options can be strung together like -aA; and so that "--" is
+  recognized as "end of options".
+
+* Make the LFOPTS parser throw away any file names, with a warning.
+
+* Use a configure system such as GNU autoconf.

@@ -1,0 +1,238 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>lf</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="lf"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">lf</th></tr></table><hr></div><div class="refentry" lang="en"><a name="id2408268"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>lf — list files, sorted by extensions, in a terse format</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">lf</code>  [<em class="replaceable"><code>OPTION</code></em>...] [<em class="replaceable"><code>FILE</code></em>...
+      ]</p></div></div><div class="refsect1" lang="en"><a name="id2507321"></a><h2>DESCRIPTION</h2><p><span><strong class="command">lf</strong></span> is a command-line tool for listing files, similar in some ways to <span><strong class="command">ls(1)</strong></span>.  <span><strong class="command">lf</strong></span> sorts the filenames by extension, and displays them in a terse output format.  Here is an example:</p><pre class="programlisting">
+DIRS: bak junk
+    : apples filelist.md5sum makefile README
+   c: bar baz foo
+   o: baz foo
+ txt: readme
+</pre><p>
+Directory names are shown first, marked by the string
+"<code class="computeroutput">DIRS</code>"; directories
+with extensions are not treated specially.  If any files with no extension
+are present they will be listed next, followed by any files that do have
+extensions.  In each case the extension is printed, followed by a list
+of filenames with the extension removed.
+</p><p>
+Some extensions are ignored.  Filenames with extensions that are too
+long (default: longer than 4 characters) are treated as if there were no
+extension in the filename.  In the example above, filelist.md5sum fell
+under this rule and was put on the line for files with no extension.
+</p><p>
+If you specify no filename arguments, <span><strong class="command">lf</strong></span> will list the files in the
+current directory.  If you specify one filename argument, <span><strong class="command">lf</strong></span> will list
+it; if it is a directory, <span><strong class="command">lf</strong></span> will list the files contained in that
+directory.
+</p><p>
+If you specify multiple filename arguments and some of them are
+directories, <span><strong class="command">lf</strong></span> will list the contents of the directories.  Here is an
+example: suppose you had two directories, foo and bar, and they had some
+files in them.  This is the result if you run <strong class="userinput"><code>lf foo bar</code></strong>:
+</p><pre class="programlisting">
+    : bar/notes foo/README
+   c: bar/foocode foo/barcode
+   h: bar/foocode foo/barcode
+</pre><p>
+If you instead called <span><strong class="command">lf</strong></span> with the --directory (-d) argument, the
+contents of directories would not be read.  You would get a result like
+this:
+</p><pre class="programlisting">
+DIRS: bar foo
+</pre><p>
+<span><strong class="command">lf</strong></span> treats files of the format "foo-1.23" specially.  Files with names
+like this don't really have a sensible extension, and it's better to
+have them listed with the no-extension files.  When any filename
+contains a dash ('-'), followed by zero or more digits, followed by a
+period ('.'), followed by one or more digits, <span><strong class="command">lf</strong></span>
+treats the filename as if it had no extension.
+</p><p>
+The extensions are printed in sorted order, and the filenames are
+sorted as well within each line.
+</p><p>
+If any files have a dot as the last character of their filename, <span><strong class="command">lf</strong></span> will
+consider their extension to be "." (a single dot).  Other than this
+special case, <span><strong class="command">lf</strong></span> prints file extensions without a dot.
+</p><p>
+<span><strong class="command">lf</strong></span> tries to get the user's default locale, and use locale-specific
+functions for sorting filenames.  (If <span><strong class="command">lf</strong></span> is called with the
+--force-lower-case option, the user's default locale is used for the
+lower-case function too.)  If <span><strong class="command">lf</strong></span> is unable to get the locale, it will
+fall back to the "C" locale which is based on plain ASCII.
+</p><p>
+Removing the extensions from the filenames saves some space, and you can fit
+quite a bit of information into one screen.  Also, it can be valuable
+to see your files sorted by extension; you can quickly tell what kinds
+of files are in the directory.
+</p><p>
+Like <span><strong class="command">ls(1)</strong></span>, if invoked with no
+filenames specified as arguments, <span><strong class="command">lf</strong></span>
+will list the files
+in the current directory.
+</p></div><div class="refsect1" lang="en"><a name="id2475418"></a><h2>OPTIONS</h2><div class="variablelist"><dl><dt><span class="term">
+          <code class="option">--license</code>
+        , </span><span class="term">
+          <code class="option">--licence</code>
+        </span></dt><dd><p>
+Show the text of the free software license under which <span><strong class="command">lf</strong></span> is
+distributed.
+</p></dd><dt><span class="term">
+          <code class="option">-a</code>
+        , </span><span class="term">
+          <code class="option">--show-all</code>
+        </span></dt><dd><p>
+Include files that would normally be hidden.  On Linux and *NIX file
+systems, filenames that start with a period ('.') would normally be hidden.
+</p></dd><dt><span class="term">
+          <code class="option">-A</code>
+        , </span><span class="term">
+          <code class="option">--ascii</code>
+        </span></dt><dd><p>
+Sort by ASCII values of characters in filenames rather than the default
+locale.  Case-sensitive.
+</p></dd><dt><span class="term">
+          <code class="option">-I</code>
+        , </span><span class="term">
+          <code class="option">--ascii-ic</code>
+        </span></dt><dd><p>
+Sort by ASCII values of characters in filenames rather than the default
+locale.  Case-insensitive.
+</p></dd><dt><span class="term">
+          <code class="option">-L</code>
+        , </span><span class="term">
+          <code class="option">--locale</code>
+        </span></dt><dd><p>
+Sort according to the default locale.  This is <span><strong class="command"><span><strong class="command">lf</strong></span></strong></span>'s
+default behavior.
+</p></dd><dt><span class="term">
+          <code class="option">-d</code>
+        , </span><span class="term">
+          <code class="option">--directory</code>
+        </span></dt><dd><p>
+Print directory names as if they were filenames, rather than listing
+their files.
+</p></dd><dt><span class="term">
+          <code class="option">-X &lt;number&gt;</code>
+        , </span><span class="term">
+          <code class="option">--ext-spacing=&lt;number&gt;</code>
+        </span></dt><dd><p>
+Sets the width reserved on each line for the extension.  Extensions
+shorter than this are right-justified within this width.  The default
+value is 4.
+</p></dd><dt><span class="term">
+          <code class="option">-Z &lt;number&gt;</code>
+        , </span><span class="term">
+          <code class="option">--ext-width-limit=&lt;number&gt;</code>
+        </span></dt><dd><p>
+Sets the limit on how long an extension can be.  Any extension longer
+than this limit is ignored (the filename is treated as if it did not
+contain any extension).  The default value is 4.
+</p></dd><dt><span class="term">
+          <code class="option">-F</code>
+        , </span><span class="term">
+          <code class="option">--force-lower-case</code>
+        </span></dt><dd><p>
+Forces all filenames (including directory names) to lower case.  This
+is mainly useful if you are dealing with a file system that only
+contains upper-case filenames, such as an old FAT file system.
+</p></dd><dt><span class="term">
+          <code class="option">-N &lt;string&gt;</code>
+        , </span><span class="term">
+          <code class="option">--name-separator=&lt;string&gt;</code>
+        </span></dt><dd><p>
+Specify a different separator to print between base filenames.  The
+default separator is a single space.  You could, for example, set
+the separator to a comma and a space (", ") if you have many
+filenames with spaces in them and you want to make it easier to tell
+where the files actually end.
+</p></dd><dt><span class="term">
+          <code class="option">-S &lt;string&gt;</code>
+        , </span><span class="term">
+          <code class="option">--replace-spaces=&lt;string&gt;</code>
+        </span></dt><dd><p>
+Specifies a string that will replace spaces in filenames in the
+listing.  You could, for example, set this to '*' and then the filename
+"<code class="computeroutput">this is my file</code>"
+would print as
+"<code class="computeroutput">this*is*my*file</code>".
+(Note that the shell expands a '*' so you will need to quote it.)
+</p></dd><dt><span class="term">
+          <code class="option">-w &lt;number&gt;</code>
+        , </span><span class="term">
+          <code class="option">--line-width=&lt;number&gt;</code>
+        </span></dt><dd><p>
+Format output in lines of this many characters or fewer.  The default
+value is 80.  <span><strong class="command">lf</strong></span> will start a new line of output if printing a filename would make the line longer than this limit.
+</p><p>
+In a graphical desktop environent the available width of lines in a
+terminal emulator can change if the window is resized.  The
+<span><strong class="command">bash(1)</strong></span>
+shell has a shell variable, COLUMNS, that always contains the current
+line width.  With the command "export COLUMNS" you can make it into an
+environment variable, and <span><strong class="command">lf</strong></span> will be able to retrieve its value.  You
+could then set the LFOPTS environment variable to include
+"--line-width=$COLUMNS", and when you resize the width of your terminal
+emulator, <span><strong class="command">lf</strong></span> will print listings that fit perfectly in the new width of
+the terminal emulator.  If you do this, you can use the --margin (-M)
+option to keep filenames from going all the way to the end of the line.
+</p></dd><dt><span class="term">
+          <code class="option">-M &lt;number&gt;</code>
+        , </span><span class="term">
+          <code class="option">--margin=&lt;number&gt;</code>
+        </span></dt><dd><p>
+Reserve (leave blank) this many spaces on the right side of each line.  The
+default value is 0, so by default <span><strong class="command">lf</strong></span> will print filenames all the way
+to the full line width.
+</p></dd><dt><span class="term">
+          <code class="option">-v &lt;number&gt;</code>
+        , </span><span class="term">
+          <code class="option">--verbose=&lt;number&gt;</code>
+        </span></dt><dd><p>
+Control how verbose the output is.  Currently three levels are defined:
+</p><table class="simplelist" border="0" summary="Simple list"><tr><td>
+0: just print filenames.
+</td></tr><tr><td>
+1: print a header showing directory being listed, then print filenames.
+</td></tr><tr><td>
+2: print a report on how options are set, then print the same output as level 1.
+</td></tr></table><p>
+</p></dd><dt><span class="term">
+          <code class="option">-V</code>
+        , </span><span class="term">
+          <code class="option">--version</code>
+        </span></dt><dd><p>
+Show version information.  Complies with GNU standard --version format.
+</p></dd></dl></div></div><div class="refsect1" lang="en"><a name="id2471049"></a><h2>SEE ALSO</h2><p>
+      <a href="http://sourceforge.net/projects/lf1/" target="_top">SourceForge project for lf</a>
+    </p></div><div class="refsect1" lang="en"><a name="id2471065"></a><h2>ENVIRONMENT VARIABLES</h2><p>
+If you set a variable called LFOPTS in the environment, lf will
+parse it for options.  These will be treated the same as if they had
+been typed as command-line arguments to lf.  If an option is set in
+LFOPTS and set a different way from the command-line, the command-line
+argument will override the argument in LFOPTS.
+</p><p>
+For example, if you often work with extensions 5 characters long, you
+might want to set LFOPTS like so:
+</p><p>
+export LFOPTS="--ext-spacing=5 --ext-width-limit=5"
+    </p></div><div class="refsect1" lang="en"><a name="id2471090"></a><h2>HISTORY</h2><p>
+In the 1980's I used a freeware program for MS-DOS called LF.COM,
+which listed files sorted by extension, and which gave me the idea for
+this program.  The author of LF.COM was not listed in the program
+anywhere, nor was source code available.  Whoever wrote LF.COM: thank
+you!
+    </p></div><div class="refsect1" lang="en"><a name="id2471105"></a><h2>AUTHOR</h2><p>
+Written by Steve R. Hastings.
+    </p></div><div class="refsect1" lang="en"><a name="id2471114"></a><h2>REPORTING BUGS</h2><p>
+	Report bugs to: lf@langri.com
+    </p></div><div class="refsect1" lang="en"><a name="id2471125"></a><h2>COPYRIGHT</h2><p>
+	Copyright © 2007 Steve R. Hastings.
+    </p><p>
+	This is free software; see the source code for copying conditions.  There is
+	NO  warranty;  not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR
+	PURPOSE.
+    </p></div><div class="refsect1" lang="en"><a name="id2471143"></a><h2>BUGS</h2><p>
+If you use the --force-lower-case (-F) option when running lf on a file
+system that allows mixed-case filenames, and there are two filenames
+that differ only by case, lf will silently show only one name for both.
+In other words, if both names are identical when forced to lower-case,
+lf will treat them as a single file.
+    </p></div></div><div class="navfooter"><hr></div></body></html>
